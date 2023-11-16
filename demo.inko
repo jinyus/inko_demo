@@ -1,0 +1,48 @@
+import std.stdio.STDOUT
+
+class pub Post {
+  let @id: String
+  let @title: String
+  let pub @tags: Array[String]
+}
+
+
+class async Main {
+
+  fn async main {
+
+    let posts = [
+      Post {
+        @id = "1",
+        @title = "Recognize through morning miss guess cover sure.",
+        @tags = ["mongo", "redis","react","golang"]
+      },
+      Post {
+        @id = "2",
+        @title = "Player anything recent planet.",
+        @tags = ["redis", "mysql","vue","rust"]
+      }
+    ]
+
+    let mut tag_map: Map[String, mut Array[Int]] = Map.with_capacity(128)
+
+    posts.iter.each_with_index fn (idx,p){
+
+      p.tags.iter.each fn (tag){
+        # rust equivalent: post_tags_map.entry(tag).or_default().push(post_idx);
+
+        let tag_posts = tag_map.opt_mut(tag).unwrap_or(mut Array.with_capacity(128))
+
+        
+        if tag_posts.size == 0{
+          tag_map.set(tag, tag_posts)
+        }
+
+        tag_posts.push(idx)
+      }
+
+    }
+
+    STDOUT.new.print(tag_map.size.to_string)
+  }
+}
